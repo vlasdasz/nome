@@ -1,0 +1,20 @@
+[package]
+authors = ["Vladas Zakrevskis <146100@gmail.com>"]
+edition = "2021"
+name = "level"
+version = "0.1.0"
+
+[lib]
+crate-type = ["rlib", "staticlib"]
+name = "level"
+
+[dependencies]
+educe = { workspace = true }
+rapier2d = { workspace = true }
+
+gm = { workspace = true }
+level-proc = { workspace = true }
+refs = { workspace = true }
+utils = { workspace = true }
+vents = { workspace = true }
+wgpu_wrapper = { workspace = true }

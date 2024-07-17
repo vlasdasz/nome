@@ -1,0 +1,65 @@
+use dispatch::on_main;
+use refs::Weak;
+use tokio::spawn;
+use ui::{UIEvents, ViewCallbacks, ViewData, ViewSetup};
+use ui_proc::view;
+use wgpu_wrapper::Screenshot;
+
+use crate as test_engine;
+use crate::App;
+
+#[view]
+pub struct ColorMeter {
+    screenshot: Screenshot,
+}
+
+impl ViewSetup for ColorMeter {
+    fn setup(self: Weak<Self>) {
+        self.update_screenshot();
+        UIEvents::size_changed().sub(self, move || self.update_screenshot());
+    }
+}
+
+impl ViewCallbacks for ColorMeter {
+    fn update(&mut self) {
+        let pos = App::current().cursor_position;
+
+        if pos.is_negative() {
+            return;
+        }
+
+        self.set_color(self.screenshot.get_pixel(pos));
+    }
+}
+
+impl ColorMeter {
+    pub fn update_screenshot(mut self: Weak<Self>) {
+        spawn(async move {
+            let Some(screenshot) = App::take_screenshot().await.ok() else {
+                return;
+            };
+
+            on_main(move || {
+                if self.is_null() {
+                    return;
+                }
+
+                self.screenshot = screenshot;
+
+                // Image::free_with_name("Screenshot");
+
+                // let Some(image) = Image::from_raw_data(
+                //     App::state(),
+                //     &cast_slice(&self.screenshot),
+                //     "Screenshot",
+                //     size.into(),
+                //     4,
+                // )
+                // .alert_err() else {
+                //     return;
+                // };
+                // self.image_view.image = image;
+            });
+        });
+    }
+}

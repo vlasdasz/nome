@@ -1,0 +1,52 @@
+[package]
+edition = "2021"
+name = "test-engine"
+version = "0.1.0"
+
+[lib]
+#crate-type = ["rlib", "staticlib", "dylib"]
+crate-type = ["rlib", "staticlib"]
+name = "test_engine"
+
+[features]
+audio = ["dep:audio"]
+default = ["audio"]
+
+[dependencies]
+anyhow = { workspace = true }
+educe = { workspace = true }
+env_logger = { workspace = true }
+home = { workspace = true }
+log = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+web-time = { workspace = true }
+wgpu = { workspace = true }
+wgpu_text = { workspace = true }
+winit = { workspace = true }
+
+dispatch = { workspace = true }
+manage = { workspace = true }
+reflected = { workspace = true }
+refs = { workspace = true }
+vents = { workspace = true }
+
+audio = { workspace = true, optional = true }
+gen = { workspace = true }
+gm = { workspace = true }
+level = { workspace = true }
+store = { workspace = true }
+ui = { workspace = true }
+ui-proc = { workspace = true }
+wgpu_wrapper = { workspace = true }
+
+[target.'cfg(target_os = "android")'.dependencies]
+android_logger = { workspace = true }
+winit = { workspace = true, features = ["android-game-activity"] }
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+winit = { workspace = true }
+
+[build-dependencies]
+cfg_aliases = { workspace = true }

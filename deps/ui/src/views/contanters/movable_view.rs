@@ -1,0 +1,97 @@
+use std::ops::{Deref, DerefMut};
+
+use gm::{
+    flat::{Point, Size},
+    Platform,
+};
+use refs::Weak;
+use ui_proc::view;
+
+use crate::{
+    Anchor::Top, HasText, HasTitle, ImageView, Label, UIImages, View, ViewData, ViewFrame, ViewSetup,
+    ViewSubviews, ViewTouch,
+};
+
+mod test_engine {
+    pub(crate) use educe;
+    pub(crate) use refs;
+
+    pub(crate) use crate as ui;
+}
+
+#[view]
+pub struct MovableView<T: View + Default + 'static> {
+    pub target_view: Weak<T>,
+
+    began_pos:  Point,
+    began_size: Size,
+
+    #[init]
+    title_label: Label,
+    corner_view: ImageView,
+}
+
+impl<T: View + Default + 'static> ViewSetup for MovableView<T> {
+    fn setup(mut self: Weak<Self>) {
+        self.title_label.place().lrt(0).h(40);
+        self.title_label.enable_touch();
+
+        self.title_label.touch().began.val(move |touch| {
+            self.place().clear();
+            self.began_pos = touch.position;
+        });
+
+        self.title_label.touch().moved.val(move |touch| {
+            let new_pos = self.frame().origin + touch.position - self.began_pos;
+            self.set_position(new_pos);
+        });
+
+        self.target_view = self.add_view();
+        self.target_view.place().lrb(0).anchor(Top, self.title_label, 0);
+
+        let corner_size = if Platform::MOBILE { 50 } else { 28 };
+
+        self.corner_view
+            .set_image(UIImages::rb_corner())
+            .place()
+            .size(corner_size, corner_size)
+            .br(0);
+        self.corner_view.enable_touch();
+
+        self.corner_view.touch().began.val(move |touch| {
+            self.place().clear();
+            self.began_pos = touch.position;
+            self.began_size = self.size();
+        });
+
+        self.corner_view.touch().moved.val(move |touch| {
+            let new_size = self.size().to_point() + touch.position - self.began_pos;
+            self.set_size(new_size.clamp(100.0, 100.0).to_size());
+        });
+        self.corner_view.draw_on_top();
+    }
+}
+
+impl<T: View + Default + 'static> HasTitle for MovableView<T> {
+    fn title(&self) -> &str {
+        self.title_label.text()
+    }
+
+    fn set_title(&mut self, title: &str) {
+        self.title_label.set_text(title);
+    }
+}
+
+impl<T: View + Default + 'static> Deref for MovableView<T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        self.target_view.deref()
+    }
+}
+
+impl<T: View + Default + 'static> DerefMut for MovableView<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.target_view.deref_mut()
+    }
+}

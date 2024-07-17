@@ -1,0 +1,17 @@
+[package]
+authors = ["Vladas Zakrevskis <146100@gmail.com>"]
+edition = "2021"
+name = "gen"
+version = "0.1.0"
+
+[lib]
+crate-type = ["rlib", "staticlib"]
+name = "gen"
+
+[dependencies]
+contour = { version = "0.12", features = ["f32"] }
+noise = "0.8"
+
+fake = { workspace = true }
+
+gm = { workspace = true }

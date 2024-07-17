@@ -1,0 +1,17 @@
+[package]
+authors = ["Vladas Zakrevskis <146100@gmail.com>"]
+edition = "2021"
+name = "gm"
+version = "0.1.0"
+
+[lib]
+crate-type = ["rlib", "staticlib"]
+name = "gm"
+
+[dependencies]
+bytemuck = { workspace = true }
+chrono = { workspace = true }
+educe = { workspace = true }
+fake = { workspace = true }
+lyon = { workspace = true }
+serde = { workspace = true }
