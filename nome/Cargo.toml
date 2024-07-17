@@ -14,4 +14,5 @@ name = "nome"
 [dependencies]
 tokio = { workspace = true }
 
+mnomer = { workspace = true }
 test-engine = { workspace = true }
