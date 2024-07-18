@@ -4,7 +4,7 @@ use mnomer::{
 };
 use test_engine::{
     refs::{MainLock, Weak},
-    ui::{view, Button, HasText, ViewData, ViewSetup},
+    ui::{view, Anchor::Bot, Button, HasText, TextField, ViewData, ViewSetup},
 };
 
 static PLAYER: MainLock<Option<BeatPlayer>> = MainLock::new();
@@ -16,16 +16,18 @@ fn player() -> &'static mut BeatPlayer {
 #[view]
 pub struct NomeView {
     #[init]
+    bmp_field:    TextField,
     start_button: Button,
 }
 
 impl NomeView {
-    #[allow(clippy::unused_self)]
     fn on_start(&mut self) {
         let player = player();
         if player.is_playing() {
+            self.start_button.set_text("Start");
             player.stop();
         } else {
+            self.start_button.set_text("Stop");
             player.play_beat().unwrap();
         }
     }
@@ -67,5 +69,17 @@ impl ViewSetup for NomeView {
 
         self.start_button.set_text("Start").place().size(200, 200).center();
         self.start_button.on_tap(move || self.on_start());
+
+        self.bmp_field.set_text("100");
+        self.bmp_field
+            .place()
+            .size(400, 100)
+            .center_x()
+            .anchor(Bot, self.start_button, 10);
+
+        self.bmp_field.editing_ended.val(|bmp| {
+            let bmp: u16 = bmp.parse().unwrap();
+            player().set_bpm(bmp);
+        });
     }
 }
