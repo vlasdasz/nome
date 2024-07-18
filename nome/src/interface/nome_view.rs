@@ -3,38 +3,21 @@ use mnomer::{
     ToneConfiguration,
 };
 use test_engine::{
-    refs::{MainLock, Weak},
-    ui::{view, Anchor::Bot, Button, HasText, TextField, ViewData, ViewSetup},
+    refs::Weak,
+    ui::{view, Anchor::Bot, Button, HasText, TextField, ViewBase, ViewData, ViewSetup},
 };
-
-static PLAYER: MainLock<Option<BeatPlayer>> = MainLock::new();
-
-fn player() -> &'static mut BeatPlayer {
-    PLAYER.get_mut().as_mut().unwrap()
-}
 
 #[view]
 pub struct NomeView {
+    player: BeatPlayer,
+
     #[init]
     bmp_field:    TextField,
     start_button: Button,
 }
 
-impl NomeView {
-    fn on_start(&mut self) {
-        let player = player();
-        if player.is_playing() {
-            self.start_button.set_text("Start");
-            player.stop();
-        } else {
-            self.start_button.set_text("Stop");
-            player.play_beat().unwrap();
-        }
-    }
-}
-
-impl ViewSetup for NomeView {
-    fn setup(mut self: Weak<Self>) {
+impl Default for NomeView {
+    fn default() -> Self {
         // Create the tone configurations for the beatplayer
         let freq = 440.0;
         let normal_beat = ToneConfiguration {
@@ -52,7 +35,7 @@ impl ViewSetup for NomeView {
         };
 
         // beatplayer takes care of generating the beat and its playback
-        let beatplayer = BeatPlayer::new(
+        let player = BeatPlayer::new(
             100,
             4,
             normal_beat,
@@ -65,8 +48,29 @@ impl ViewSetup for NomeView {
             ]),
         );
 
-        PLAYER.get_mut().replace(beatplayer);
+        Self {
+            __view_base: ViewBase::default(),
+            player,
+            bmp_field: Weak::default(),
+            start_button: Weak::default(),
+        }
+    }
+}
 
+impl NomeView {
+    fn on_start(&mut self) {
+        if self.player.is_playing() {
+            self.start_button.set_text("Start");
+            self.player.stop();
+        } else {
+            self.start_button.set_text("Stop");
+            self.player.play_beat().unwrap();
+        }
+    }
+}
+
+impl ViewSetup for NomeView {
+    fn setup(mut self: Weak<Self>) {
         self.start_button.set_text("Start").place().size(200, 200).center();
         self.start_button.on_tap(move || self.on_start());
 
@@ -77,9 +81,9 @@ impl ViewSetup for NomeView {
             .center_x()
             .anchor(Bot, self.start_button, 10);
 
-        self.bmp_field.editing_ended.val(|bmp| {
+        self.bmp_field.editing_ended.val(move |bmp| {
             let bmp: u16 = bmp.parse().unwrap();
-            player().set_bpm(bmp);
+            self.player.set_bpm(bmp);
         });
     }
 }
