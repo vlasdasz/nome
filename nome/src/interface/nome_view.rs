@@ -4,16 +4,19 @@ use mnomer::{
 };
 use test_engine::{
     refs::Weak,
-    ui::{view, Anchor::Bot, Button, HasText, TextField, ViewBase, ViewData, ViewSetup},
+    ui::{view, Button, HasText, Label, ViewBase, ViewData, ViewSetup},
 };
+
+use crate::interface::tempo_control::TempoControl;
 
 #[view]
 pub struct NomeView {
     player: BeatPlayer,
 
     #[init]
-    bmp_field:    TextField,
-    start_button: Button,
+    tempo_control: TempoControl,
+    tempo_label:   Label,
+    start_button:  Button,
 }
 
 impl Default for NomeView {
@@ -51,7 +54,8 @@ impl Default for NomeView {
         Self {
             __view_base: ViewBase::default(),
             player,
-            bmp_field: Weak::default(),
+            tempo_control: Weak::default(),
+            tempo_label: Weak::default(),
             start_button: Weak::default(),
         }
     }
@@ -71,19 +75,25 @@ impl NomeView {
 
 impl ViewSetup for NomeView {
     fn setup(mut self: Weak<Self>) {
-        self.start_button.set_text("Start").place().size(200, 200).center();
-        self.start_button.on_tap(move || self.on_start());
-
-        self.bmp_field.set_text("100");
-        self.bmp_field
-            .place()
-            .size(400, 100)
-            .center_x()
-            .anchor(Bot, self.start_button, 10);
-
-        self.bmp_field.editing_ended.val(move |bmp| {
-            let bmp: u16 = bmp.parse().unwrap();
-            self.player.set_bpm(bmp);
+        self.tempo_control.place().l(10).t(120).r(10).h(100);
+        self.tempo_control.changed.val(move |bpm| {
+            let mut current: i16 = self.tempo_label.text().parse().unwrap();
+            current += bpm;
+            if current < 0 {
+                current = 0;
+            }
+            self.player.set_bpm(current.try_into().unwrap());
+            self.tempo_label.set_text(current);
         });
+
+        self.tempo_label
+            .set_text_size(80)
+            .set_text("100")
+            .place()
+            .size(400, 200)
+            .center();
+
+        self.start_button.set_text_size(64).set_text("Start").place().lrb(10).h(200);
+        self.start_button.on_tap(move || self.on_start());
     }
 }
