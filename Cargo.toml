@@ -10,7 +10,7 @@ ignored = []
 [workspace.dependencies]
 tokio = "1.38"
 
-mnomer = { path = "../3/mnomer" }
+mnomer = { path = "../forks/mnomer" }
 test-engine = { path = "../test-engine/test-engine" }
 
 nome = { path = "nome" }

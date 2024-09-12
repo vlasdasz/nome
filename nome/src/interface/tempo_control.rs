@@ -6,7 +6,6 @@ use test_engine::{
 };
 
 #[view]
-#[derive(Default)]
 pub struct TempoControl {
     pub changed: Event<i16>,
 

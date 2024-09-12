@@ -4,61 +4,20 @@ use mnomer::{
 };
 use test_engine::{
     refs::Weak,
-    ui::{view, Button, HasText, Label, ViewBase, ViewData, ViewSetup},
+    ui::{view, Button, HasText, Label, ViewData, ViewSetup},
 };
 
 use crate::interface::tempo_control::TempoControl;
 
 #[view]
 pub struct NomeView {
+    #[educe(Default = make_player())]
     player: BeatPlayer,
 
     #[init]
     tempo_control: TempoControl,
     tempo_label:   Label,
     start_button:  Button,
-}
-
-impl Default for NomeView {
-    fn default() -> Self {
-        // Create the tone configurations for the beatplayer
-        let freq = 440.0;
-        let normal_beat = ToneConfiguration {
-            frequency:   freq,
-            sample_rate: 48000.0, // may be changed by the beatplayer to match the audio device
-            length:      0.05,    // 50 ms
-            overtones:   1,
-            channels:    1,
-        };
-
-        // accentuated beat is 5 semitones higher than the normal beat
-        let accentuated_beat = ToneConfiguration {
-            frequency: frequency_relative_semitone_equal_temperament(freq, 5.0),
-            ..normal_beat
-        };
-
-        // beatplayer takes care of generating the beat and its playback
-        let player = BeatPlayer::new(
-            100,
-            4,
-            normal_beat,
-            accentuated_beat,
-            BeatPattern(vec![
-                BeatPatternType::Accent,
-                BeatPatternType::Beat,
-                BeatPatternType::Beat,
-                BeatPatternType::Beat,
-            ]),
-        );
-
-        Self {
-            __view_base: ViewBase::default(),
-            player,
-            tempo_control: Weak::default(),
-            tempo_label: Weak::default(),
-            start_button: Weak::default(),
-        }
-    }
 }
 
 impl NomeView {
@@ -96,4 +55,36 @@ impl ViewSetup for NomeView {
         self.start_button.set_text_size(64).set_text("Start").place().lrb(10).h(200);
         self.start_button.on_tap(move || self.on_start());
     }
+}
+
+fn make_player() -> BeatPlayer {
+    // Create the tone configurations for the beatplayer
+    let freq = 440.0;
+    let normal_beat = ToneConfiguration {
+        frequency:   freq,
+        sample_rate: 48000.0, // may be changed by the beatplayer to match the audio device
+        length:      0.05,    // 50 ms
+        overtones:   1,
+        channels:    1,
+    };
+
+    // accentuated beat is 5 semitones higher than the normal beat
+    let accentuated_beat = ToneConfiguration {
+        frequency: frequency_relative_semitone_equal_temperament(freq, 5.0),
+        ..normal_beat
+    };
+
+    // beatplayer takes care of generating the beat and its playback
+    BeatPlayer::new(
+        100,
+        4,
+        normal_beat,
+        accentuated_beat,
+        BeatPattern(vec![
+            BeatPatternType::Accent,
+            BeatPatternType::Beat,
+            BeatPatternType::Beat,
+            BeatPatternType::Beat,
+        ]),
+    )
 }
