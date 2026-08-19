@@ -2,15 +2,39 @@
 default-members = ["nome"]
 members = ["nome", "nome-android"]
 
-resolver = "2"
+resolver = "3"
+
+[workspace.package]
+authors = ["Vladas Zakrevskis <146100@gmail.com>"]
+edition = "2024"
+version = "0.1.0"
 
 [workspace.metadata.cargo-machete]
 ignored = []
 
 [workspace.dependencies]
-tokio = "1.38"
+plat = "0.9"
 
-mnomer = { path = "../forks/mnomer" }
-test-engine = { path = "../test-engine/test-engine" }
+mnomer = { git = "https://github.com/VladasZ/mnomer", rev = "f0cc428974b0859432be0861d5e2c965aa1acfd0" }
+test-engine = { git = "https://github.com/hilen/test-engine", rev = "9673c3496c9a24278c97b9e1a97574f4fcc4bd00" }
 
 nome = { path = "nome" }
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+
+module_name_repetitions = "allow"
+explicit_deref_methods = "allow"
+missing_panics_doc = "allow"
+missing_errors_doc = "allow"
+missing_safety_doc = "allow"
+format_push_string = "allow"
+new_without_default = "allow"
+must_use_candidate = "allow"
+module_inception = "allow"
+needless_pass_by_value = "allow"
+unnecessary_box_returns = "allow"
+return_self_not_must_use = "allow"
+struct_field_names = "allow"
+manual_assert = "allow"

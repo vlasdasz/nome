@@ -1,8 +1,8 @@
 use test_engine::{
+    Event,
     gm::Apply,
     refs::Weak,
-    ui::{view, Button, HasText, ViewData, ViewSetup},
-    Event,
+    ui::{Button, Setup, ViewData, view},
 };
 
 #[view]
@@ -18,8 +18,8 @@ pub struct TempoControl {
     p_20: Button,
 }
 
-impl ViewSetup for TempoControl {
-    fn setup(mut self: Weak<Self>) {
+impl Setup for TempoControl {
+    fn setup(self: Weak<Self>) {
         self.place().all_hor();
 
         self.m_20.set_text("-20");
@@ -29,7 +29,7 @@ impl ViewSetup for TempoControl {
         self.p_5.set_text("+5");
         self.p_20.set_text("+20");
 
-        [self.m_20, self.m_5, self.m_1, self.p_1, self.p_5, self.p_20].apply(|mut button| {
+        [self.m_20, self.m_5, self.m_1, self.p_1, self.p_5, self.p_20].apply(|button| {
             button.set_text_size(60);
             button.on_tap(move || self.changed.trigger(button.text().parse().unwrap()));
         });

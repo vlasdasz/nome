@@ -1,8 +1,0 @@
-export ANDROID_LIB_NAME="nome"
-export IOS_SIMULATOR_SCHEME="Nome Simulator"
-export IOS_RELEASE_SCHEME="Nome"
-export IOS_CARGO_PROFILE="release"
-export PROJECT_NAME="Nome"
-export APP_NAME="nome"
-#export CARGO_PROFILE_FOR_PROFILING="release"
-export CARGO_PROFILE_FOR_PROFILING="dev"

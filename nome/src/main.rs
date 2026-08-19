@@ -1,10 +1,6 @@
-#![allow(incomplete_features)]
-#![feature(specialization)]
-#![feature(arbitrary_self_types)]
-#![feature(const_trait_impl)]
-
-mod interface;
+use nome::NomeApp;
+use test_engine::App;
 
 fn main() {
-    nome::start_nome();
+    NomeApp::start();
 }

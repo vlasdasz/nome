@@ -1,0 +1,10 @@
+[
+  {
+    "label": "Nome",
+    "command": "cargo run",
+  },
+  {
+    "label": "Nome Release",
+    "command": "cargo run --release",
+  },
+]

@@ -1,23 +1,16 @@
-
 include build/common.mk
 
-ui:
-	cargo run -p ui-test
-	cargo run -p ui-test --release
+run:
+	cargo run
 
 fix:
 	cargo fix --allow-dirty --allow-staged --all
 
 lint:
-	cargo clippy \
-      -- \
-      \
-      -W clippy::all \
-      -W clippy::pedantic \
-      \
-      -A clippy::missing_panics_doc \
-      \
-      -D warnings
+	cargo clippy --workspace --all-targets -- -D warnings
 
-
-.PHONY: mobile
+ci:
+	typos
+	cargo fmt --all -- --check
+	cargo clippy --workspace --all-targets -- -D warnings
+	cargo machete

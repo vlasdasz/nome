@@ -1,10 +1,10 @@
 use mnomer::{
-    frequency_relative_semitone_equal_temperament, BeatPattern, BeatPatternType, BeatPlayer,
-    ToneConfiguration,
+    BeatPattern, BeatPatternType, BeatPlayer, ToneConfiguration,
+    frequency_relative_semitone_equal_temperament,
 };
 use test_engine::{
     refs::Weak,
-    ui::{view, Button, HasText, Label, ViewData, ViewSetup},
+    ui::{Button, Label, Setup, ViewData, view},
 };
 
 use crate::interface::tempo_control::TempoControl;
@@ -32,7 +32,7 @@ impl NomeView {
     }
 }
 
-impl ViewSetup for NomeView {
+impl Setup for NomeView {
     fn setup(mut self: Weak<Self>) {
         self.tempo_control.place().l(10).t(120).r(10).h(100);
         self.tempo_control.changed.val(move |bpm| {
@@ -58,23 +58,21 @@ impl ViewSetup for NomeView {
 }
 
 fn make_player() -> BeatPlayer {
-    // Create the tone configurations for the beatplayer
     let freq = 440.0;
     let normal_beat = ToneConfiguration {
         frequency:   freq,
-        sample_rate: 48000.0, // may be changed by the beatplayer to match the audio device
-        length:      0.05,    // 50 ms
+        sample_rate: 48000.0,
+        length:      0.05,
         overtones:   1,
         channels:    1,
     };
 
-    // accentuated beat is 5 semitones higher than the normal beat
+    // The accent is five semitones above the normal beat.
     let accentuated_beat = ToneConfiguration {
         frequency: frequency_relative_semitone_equal_temperament(freq, 5.0),
         ..normal_beat
     };
 
-    // beatplayer takes care of generating the beat and its playback
     BeatPlayer::new(
         100,
         4,

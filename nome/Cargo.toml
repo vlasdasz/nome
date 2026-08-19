@@ -1,8 +1,8 @@
 [package]
-authors = ["Vladas Zakrevskis <146100@gmail.com>"]
-edition = "2021"
+authors.workspace = true
+edition.workspace = true
 name = "nome"
-version = "0.1.0"
+version.workspace = true
 
 [[bin]]
 name = "nome"
@@ -12,7 +12,11 @@ crate-type = ["rlib", "staticlib"]
 name = "nome"
 
 [dependencies]
-tokio = { workspace = true }
-
 mnomer = { workspace = true }
 test-engine = { workspace = true }
+
+[build-dependencies]
+plat = { workspace = true }
+
+[lints]
+workspace = true

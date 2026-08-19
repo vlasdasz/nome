@@ -1,0 +1,12 @@
+// https://zed.dev/docs/debugger
+[
+  {
+    "label": "Debug Nome",
+    "adapter": "CodeLLDB",
+    "build": {
+      "command": "cargo",
+      "args": ["build"],
+    },
+    "sourceLanguages": ["rust"],
+  },
+]
