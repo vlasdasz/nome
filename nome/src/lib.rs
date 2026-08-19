@@ -4,6 +4,7 @@
 
 mod app;
 mod interface;
+mod metronome;
 
 pub use app::NomeApp;
 #[cfg(not(ios))]

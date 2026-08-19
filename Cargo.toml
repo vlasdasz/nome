@@ -15,8 +15,8 @@ ignored = []
 [workspace.dependencies]
 plat = "0.9"
 
-mnomer = { git = "https://github.com/VladasZ/mnomer", rev = "f0cc428974b0859432be0861d5e2c965aa1acfd0" }
-test-engine = { git = "https://github.com/hilen/test-engine", rev = "9673c3496c9a24278c97b9e1a97574f4fcc4bd00" }
+mnomer = { git = "https://github.com/VladasZ/mnomer", rev = "098e103fe9698af7498bf4a136b81f8f4cc816fa" }
+test-engine = { path = "../../test-engine/test-engine" }
 
 nome = { path = "nome" }
 

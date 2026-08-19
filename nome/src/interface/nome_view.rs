@@ -1,88 +1,76 @@
-use mnomer::{
-    BeatPattern, BeatPatternType, BeatPlayer, ToneConfiguration,
-    frequency_relative_semitone_equal_temperament,
-};
 use test_engine::{
+    dispatch::on_main,
     refs::Weak,
-    ui::{Button, Label, Setup, ViewData, view},
+    ui::{Container, Setup, ViewData, ViewSubviews, view},
 };
 
-use crate::interface::tempo_control::TempoControl;
+use crate::{interface::panel::ControlPanel, metronome::BEATS};
 
+const BACKGROUND: &str = "#12100F";
+const DIM: &str = "#241F1C";
+const BEAT: &str = "#FF8A5B";
+const ACCENT: &str = "#FFD166";
+const TEXT: &str = "#F4EFEA";
+
+/// The metronome screen. Four tall bars side by side, and the beat sweeps left
+/// to right across them the way a bar of music reads.
 #[view]
 pub struct NomeView {
-    #[educe(Default = make_player())]
-    player: BeatPlayer,
+    cells: Vec<Weak<Container>>,
 
     #[init]
-    tempo_control: TempoControl,
-    tempo_label:   Label,
-    start_button:  Button,
-}
-
-impl NomeView {
-    fn on_start(&mut self) {
-        if self.player.is_playing() {
-            self.start_button.set_text("Start");
-            self.player.stop();
-        } else {
-            self.start_button.set_text("Stop");
-            self.player.play_beat().unwrap();
-        }
-    }
+    field: Container,
+    panel: ControlPanel,
 }
 
 impl Setup for NomeView {
     fn setup(mut self: Weak<Self>) {
-        self.tempo_control.place().l(10).t(120).r(10).h(100);
-        self.tempo_control.changed.val(move |bpm| {
-            let mut current: i16 = self.tempo_label.text().parse().unwrap();
-            current += bpm;
-            if current < 0 {
-                current = 0;
-            }
-            self.player.set_bpm(current.try_into().unwrap());
-            self.tempo_label.set_text(current);
+        self.set_color(BACKGROUND);
+
+        self.field.place().lrt(20).b(ControlPanel::HEIGHT + 30.0).all_hor().all(10);
+
+        for _ in 0..BEATS {
+            let cell = self.field.add_view::<Container>();
+            cell.set_color(DIM).set_corner_radius(10);
+            self.cells.push(cell);
+        }
+
+        // The player reports each beat from the audio thread, so the light
+        // comes off the same clock as the click and cannot drift from it.
+        // Views are main thread only, hence the hop.
+        self.panel.on_beat(move |beat| {
+            on_main(move || self.light(beat));
         });
 
-        self.tempo_label
-            .set_text_size(80)
-            .set_text("100")
-            .place()
-            .size(400, 200)
-            .center();
+        self.panel.toggled.val(move |()| {
+            if !self.panel.is_playing() {
+                self.clear();
+            }
+        });
 
-        self.start_button.set_text_size(64).set_text("Start").place().lrb(10).h(200);
-        self.start_button.on_tap(move || self.on_start());
+        self.panel.set_palette(DIM, TEXT, BEAT, BACKGROUND, 10.0);
+        self.panel.place().lrb(16).h(ControlPanel::HEIGHT);
     }
 }
 
-fn make_player() -> BeatPlayer {
-    let freq = 440.0;
-    let normal_beat = ToneConfiguration {
-        frequency:   freq,
-        sample_rate: 48000.0,
-        length:      0.05,
-        overtones:   1,
-        channels:    1,
-    };
+impl NomeView {
+    fn light(self: Weak<Self>, beat: usize) {
+        for (index, cell) in self.cells.iter().enumerate() {
+            let color = if index != beat {
+                DIM
+            } else if index == 0 {
+                ACCENT
+            } else {
+                BEAT
+            };
 
-    // The accent is five semitones above the normal beat.
-    let accentuated_beat = ToneConfiguration {
-        frequency: frequency_relative_semitone_equal_temperament(freq, 5.0),
-        ..normal_beat
-    };
+            cell.set_color(color);
+        }
+    }
 
-    BeatPlayer::new(
-        100,
-        4,
-        normal_beat,
-        accentuated_beat,
-        BeatPattern(vec![
-            BeatPatternType::Accent,
-            BeatPatternType::Beat,
-            BeatPatternType::Beat,
-            BeatPatternType::Beat,
-        ]),
-    )
+    fn clear(self: Weak<Self>) {
+        for cell in &self.cells {
+            cell.set_color(DIM);
+        }
+    }
 }

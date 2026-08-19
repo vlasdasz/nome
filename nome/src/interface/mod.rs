@@ -1,2 +1,3 @@
 pub mod nome_view;
-pub mod tempo_control;
+pub mod panel;
+pub mod tempo_controls;

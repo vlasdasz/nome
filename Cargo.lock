@@ -2085,7 +2085,6 @@ dependencies = [
 [[package]]
 name = "hreads"
 version = "0.14.2"
-source = "git+https://github.com/hilen/test-engine?rev=9673c3496c9a24278c97b9e1a97574f4fcc4bd00#9673c3496c9a24278c97b9e1a97574f4fcc4bd00"
 dependencies = [
  "anyhow",
  "gloo-timers",
@@ -2668,7 +2667,6 @@ checksum = "7a79a3332a6609480d7d0c9eab957bca6b455b91bb84e66d19f5ff66294b85b8"
 [[package]]
 name = "level-proc"
 version = "0.1.0"
-source = "git+https://github.com/hilen/test-engine?rev=9673c3496c9a24278c97b9e1a97574f4fcc4bd00#9673c3496c9a24278c97b9e1a97574f4fcc4bd00"
 dependencies = [
  "quote",
  "syn 2.0.119",
@@ -2988,7 +2986,7 @@ dependencies = [
 [[package]]
 name = "mnomer"
 version = "0.2.1"
-source = "git+https://github.com/VladasZ/mnomer?rev=f0cc428974b0859432be0861d5e2c965aa1acfd0#f0cc428974b0859432be0861d5e2c965aa1acfd0"
+source = "git+https://github.com/VladasZ/mnomer?rev=098e103fe9698af7498bf4a136b81f8f4cc816fa#098e103fe9698af7498bf4a136b81f8f4cc816fa"
 dependencies = [
  "cpal 0.15.3",
  "crossterm",
@@ -3156,7 +3154,6 @@ dependencies = [
 [[package]]
 name = "netrun"
 version = "0.35.2"
-source = "git+https://github.com/hilen/test-engine?rev=9673c3496c9a24278c97b9e1a97574f4fcc4bd00#9673c3496c9a24278c97b9e1a97574f4fcc4bd00"
 dependencies = [
  "anyhow",
  "byte-unit",
@@ -4048,7 +4045,6 @@ dependencies = [
 [[package]]
 name = "plat"
 version = "0.10.0"
-source = "git+https://github.com/hilen/test-engine?rev=9673c3496c9a24278c97b9e1a97574f4fcc4bd00#9673c3496c9a24278c97b9e1a97574f4fcc4bd00"
 dependencies = [
  "cfg_aliases",
 ]
@@ -4647,7 +4643,6 @@ dependencies = [
 [[package]]
 name = "refs"
 version = "0.53.0"
-source = "git+https://github.com/hilen/test-engine?rev=9673c3496c9a24278c97b9e1a97574f4fcc4bd00#9673c3496c9a24278c97b9e1a97574f4fcc4bd00"
 dependencies = [
  "anyhow",
  "event-listener",
@@ -5881,7 +5876,6 @@ dependencies = [
 [[package]]
 name = "test-engine"
 version = "0.1.0"
-source = "git+https://github.com/hilen/test-engine?rev=9673c3496c9a24278c97b9e1a97574f4fcc4bd00#9673c3496c9a24278c97b9e1a97574f4fcc4bd00"
 dependencies = [
  "android_logger",
  "anyhow",
@@ -6394,7 +6388,6 @@ checksum = "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
 [[package]]
 name = "ui-proc"
 version = "0.1.0"
-source = "git+https://github.com/hilen/test-engine?rev=9673c3496c9a24278c97b9e1a97574f4fcc4bd00#9673c3496c9a24278c97b9e1a97574f4fcc4bd00"
 dependencies = [
  "parking_lot",
  "quote",
@@ -6598,7 +6591,6 @@ checksum = "ba73ea9cf16a25df0c8caa16c51acb937d5712a8429db78a3ee29d5dcacd3a65"
 [[package]]
 name = "vents"
 version = "0.15.1"
-source = "git+https://github.com/hilen/test-engine?rev=9673c3496c9a24278c97b9e1a97574f4fcc4bd00#9673c3496c9a24278c97b9e1a97574f4fcc4bd00"
 dependencies = [
  "console_error_panic_hook",
  "console_log",
