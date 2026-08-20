@@ -1,7 +1,7 @@
 use test_engine::{
     dispatch::on_main,
     refs::Weak,
-    ui::{Container, Setup, ViewData, ViewSubviews, view},
+    ui::{Container, Setup, UIManager, ViewData, ViewSubviews, view},
 };
 
 use crate::{interface::panel::ControlPanel, metronome::BEATS};
@@ -25,7 +25,7 @@ pub struct NomeView {
 
 impl Setup for NomeView {
     fn setup(mut self: Weak<Self>) {
-        self.set_color(BACKGROUND);
+        UIManager::set_clear_color(BACKGROUND);
 
         self.field.place().lrt(20).b(ControlPanel::HEIGHT + 30.0).all_hor().all(10);
 
