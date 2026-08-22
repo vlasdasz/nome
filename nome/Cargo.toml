@@ -13,7 +13,7 @@ name = "nome"
 
 [dependencies]
 mnomer = { workspace = true }
-test-engine = { workspace = true }
+hilen = { workspace = true }
 
 [build-dependencies]
 plat = { workspace = true }

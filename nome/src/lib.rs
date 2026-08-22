@@ -8,7 +8,7 @@ mod metronome;
 
 pub use app::NomeApp;
 #[cfg(not(ios))]
-pub use test_engine;
+pub use hilen;
 
 #[cfg(ios)]
-test_engine::register_app!(NomeApp);
+hilen::register_app!(NomeApp);

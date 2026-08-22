@@ -1,6 +1,6 @@
 # nome
 
-A metronome. One Rust crate on [test-engine](https://github.com/hilen/test-engine), so the
+A metronome. One Rust crate on [hilen](https://github.com/hilen/hilen), so the
 same code runs on desktop, iOS and Android. The beat playback comes from
 [mnomer](https://github.com/VladasZ/mnomer).
 

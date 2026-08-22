@@ -10,7 +10,7 @@ name = "nome"
 
 [dependencies]
 nome = { workspace = true }
-test-engine = { workspace = true }
+hilen = { workspace = true }
 
 [package.metadata.android]
 build_targets = ["armv7-linux-androideabi", "aarch64-linux-android"]
